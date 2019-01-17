@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".Home"
+    tools:showIn="@layout/app_bar_home">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/issImage"
+        android:layout_width="wrap_content"
+        android:layout_height="80pt"
+        android:scaleType="centerCrop"
+        android:src="@drawable/main_iss"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <android.support.design.card.MaterialCardView
+        android:id="@+id/CardNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        card_view:cardBackgroundColor="@color/colorAccent"
+        app:layout_constraintTop_toBottomOf="@id/issImage">
+
+        <TextView
+            android:id="@+id/iss_triviaNFacts"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_margin="5dp"
+            android:text="@string/trivia_n_facts"
+            android:textAlignment="textStart"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"/>
+
+    </android.support.design.card.MaterialCardView>
+
+    <android.support.design.card.MaterialCardView
+        android:id="@+id/CardLoc"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginTop="8dp"
+        android:focusable="true"
+        android:clickable="true"
+        card_view:cardBackgroundColor="@color/colorAccent"
+        app:layout_constraintTop_toBottomOf="@id/CardNav">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/locTitle"
+            app:layout_constraintTop_toBottomOf="@+id/locTitle">
+
+            <TextView
+                android:id="@+id/locTitle"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:text="@string/current_location"
+                android:textAlignment="textStart"
+                android:textColor="@android:color/white"
+                android:textSize="24sp" />
+
+
+            <TextView
+                android:id="@+id/TVlonlat"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_margin="5dp"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="18sp"
+                android:textAlignment="textStart"
+                app:layout_constraintTop_toBottomOf="@+id/locTitle" />
+
+            <Button
+                android:id="@+id/mapButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:background="@android:color/transparent"
+                android:drawableTop="@drawable/ic_baseline_arrow_down"
+                android:drawableTint="@android:color/white"
+                android:gravity="end"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
+
+
+    </android.support.design.card.MaterialCardView>
+
+    <android.support.design.card.MaterialCardView
+        android:id="@+id/CardLocMap"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="8dp"
+        android:focusable="true"
+        android:clickable="true"
+        card_view:cardBackgroundColor="@color/colorAccent"
+        app:layout_constraintTop_toBottomOf="@id/CardLoc">
+
+        <com.mapbox.mapboxsdk.maps.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            mapbox:mapbox_cameraTargetLat="40.73581"
+            mapbox:mapbox_cameraTargetLng="-73.99155"
+            mapbox:mapbox_styleUrl="mapbox://styles/mapbox/streets-v11"
+            mapbox:mapbox_cameraZoom="11" />
+
+    </android.support.design.card.MaterialCardView>
+
+    <android.support.design.card.MaterialCardView
+        android:id="@+id/CardAstro"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:clickable="false"
+        android:focusable="auto"
+        app:cardBackgroundColor="@color/colorAccent"
+        app:layout_constraintTop_toBottomOf="@+id/CardLoc">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/astroTitle"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:text="@string/current_crew"
+                android:textAlignment="textStart"
+                android:textColor="@android:color/white"
+                android:textSize="24sp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_astronauts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/astroTitle" />
+
+        </RelativeLayout>
+
+
+    </android.support.design.card.MaterialCardView>
+
+</android.support.constraint.ConstraintLayout>
