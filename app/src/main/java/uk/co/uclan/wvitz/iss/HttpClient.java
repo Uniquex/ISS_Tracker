@@ -4,7 +4,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-class HttpClient {
+public class HttpClient {
     private static final HttpClient ourInstance = new HttpClient();
 
     static HttpClient getInstance() {

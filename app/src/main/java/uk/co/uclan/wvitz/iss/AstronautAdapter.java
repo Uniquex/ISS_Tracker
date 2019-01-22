@@ -25,8 +25,8 @@ public class AstronautAdapter extends RecyclerView.Adapter<AstronautAdapter.MyVi
     }
 
 
-    public AstronautAdapter(List<Astronaut> moviesList) {
-        this.astroList = moviesList;
+    public AstronautAdapter(List<Astronaut> astroList) {
+        this.astroList = astroList;
     }
 
     @Override

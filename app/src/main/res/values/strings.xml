@@ -1,13 +1,16 @@
 <resources>
-    <string name="app_name">ISS</string>
+    <string name="app_name">ISS Tracker</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="observations">Observations</string>
+    <string name="add_observation">Add Observation</string>
     <string name="current_crew">Current crew</string>
     <string name="current_location">Current location</string>
+    <string name="future_pass_times">Future pass times</string>
     <string name="trivia_n_facts">Trivia and Facts</string>
     <string name="draw_marker_options_title">ISS</string>
     <string name="draw_marker_options_snippet">ISS 2</string>

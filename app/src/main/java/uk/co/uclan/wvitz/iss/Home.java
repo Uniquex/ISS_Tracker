@@ -85,14 +85,14 @@ public class Home extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(v -> {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+            Intent myIntent = new Intent(v.getContext(), AddObservation.class);
+            startActivity(myIntent);
         });
+
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -197,23 +197,14 @@ public class Home extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-/*        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }*/
-
         switch (id) {
             case R.id.nav_passTimes: {
                 Intent myIntent = new Intent(this, PassTimes.class);
+                startActivity(myIntent);
+                break;
+            }
+            case R.id.nav_observations: {
+                Intent myIntent = new Intent(this, Observations.class);
                 startActivity(myIntent);
                 break;
             }
@@ -249,8 +240,6 @@ public class Home extends AppCompatActivity
     private void getAstronatus() {
         // http://api.open-notify.org/astros.json
 
-        //this.aList.add(new Astronaut("Test", "Test2", "ISS"));
-        List<Astronaut> aList2 = this.aList;
 
         HttpClient.get("http://api.open-notify.org/astros.json", null, new JsonHttpResponseHandler() {
             @Override
