@@ -1,19 +1,19 @@
 package uk.co.uclan.wvitz.iss;
 
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.orm.SugarContext;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import uk.co.uclan.wvitz.iss.DT.Observation;
 import uk.co.uclan.wvitz.iss.adapters.ObservationAdapter;
 
@@ -40,7 +40,7 @@ public class Observations extends AppCompatActivity {
         mAdapter = new ObservationAdapter(mList);
 
         mLinearLayoutManager = new LinearLayoutManager(this);
-        mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mLinearLayoutManager.setOrientation(RecyclerView.VERTICAL);
 
         this.mRecyclerView = findViewById(R.id.rv_observations);
         mRecyclerView.setHasFixedSize(true);

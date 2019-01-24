@@ -2,36 +2,22 @@ package uk.co.uclan.wvitz.iss;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
-import android.support.constraint.ConstraintSet;
-import android.support.design.card.MaterialCardView;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.transition.TransitionManager;
+
+
 import android.util.Log;
-import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.loopj.android.http.*;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Icon;
@@ -44,11 +30,20 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 
 import org.json.*;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import cz.msebera.android.httpclient.Header;
 import uk.co.uclan.wvitz.iss.DT.Astronaut;
 
@@ -94,7 +89,7 @@ public class Home extends AppCompatActivity
         });
 
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -117,7 +112,7 @@ public class Home extends AppCompatActivity
         mapButton = findViewById(R.id.mapButton);
 
 
-        addAnimationOperations();
+        setLayout();
 
         // Astronauts
 
@@ -126,12 +121,13 @@ public class Home extends AppCompatActivity
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 
-        recyclerView = (RecyclerView) findViewById(R.id.rv_astronauts);
+        recyclerView = findViewById(R.id.rv_astronauts);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(aAdapter);
 
         getAstronatus();
         getIssLocation();
+        Log.i("Main", this.aList.toString());
 
         // Button
         this.setOnClickListeners();
@@ -153,7 +149,7 @@ public class Home extends AppCompatActivity
 
         navCard.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Intent myIntent = new Intent(view.getContext(), Facts.class);
+                Intent myIntent = new Intent(view.getContext(), TriviaFacts.class);
                 startActivity(myIntent);
             }
         });
@@ -337,7 +333,7 @@ public class Home extends AppCompatActivity
         });
     }
 
-    private void addAnimationOperations() {
+    private void setLayout() {
         boolean set = false;
 
         mCSet1.clone(this, R.layout.content_home);

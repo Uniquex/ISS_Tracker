@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.card.MaterialCardView
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -10,12 +10,12 @@
     card_view:cardCornerRadius="0dp"
     card_view:cardUseCompatPadding="true">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?android:selectableItemBackground">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/timestamp"
             android:layout_width="210dp"
             android:layout_height="30sp"
@@ -25,13 +25,13 @@
             android:textSize="18sp"
             card_view:layout_constraintStart_toStartOf="parent"/>
 
-        <LinearLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             card_view:layout_constraintLeft_toRightOf="@+id/timestamp">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/lon"
                 android:layout_width="100dp"
                 android:layout_height="20sp"
@@ -39,7 +39,7 @@
                 android:textColor="@android:color/darker_gray"
                 android:textSize="15sp"/>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/lat"
                 android:layout_width="100dp"
                 android:layout_height="20sp"
@@ -47,24 +47,24 @@
                 android:textColor="@android:color/darker_gray"
                 android:textSize="15sp"/>
 
-        </LinearLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/note"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
             card_view:layout_constraintTop_toBottomOf="@+id/timestamp" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             card_view:layout_constraintLeft_toRightOf="@id/note">
 
-        </android.support.v7.widget.RecyclerView>
+        </androidx.recyclerview.widget.RecyclerView>
 
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-</android.support.design.card.MaterialCardView>
+</com.google.android.material.card.MaterialCardView>

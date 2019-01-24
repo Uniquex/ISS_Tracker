@@ -1,8 +1,8 @@
 package uk.co.uclan.wvitz.iss;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import uk.co.uclan.wvitz.iss.ui.facts.FactsFragment;
 
 public class Facts extends AppCompatActivity {
@@ -13,8 +13,8 @@ public class Facts extends AppCompatActivity {
         setContentView(R.layout.facts_activity);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, FactsFragment.newInstance())
-                    .commitNow();
+                    .replace(R.id.container, FactsFragment.newInstance());
+//                    .commitNow();
         }
     }
 }

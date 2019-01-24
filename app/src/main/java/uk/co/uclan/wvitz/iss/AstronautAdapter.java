@@ -1,6 +1,5 @@
 package uk.co.uclan.wvitz.iss;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +7,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import androidx.recyclerview.widget.RecyclerView;
 import uk.co.uclan.wvitz.iss.DT.Astronaut;
 
 public class AstronautAdapter extends RecyclerView.Adapter<AstronautAdapter.MyViewHolder> {
