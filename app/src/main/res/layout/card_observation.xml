@@ -58,9 +58,11 @@
             card_view:layout_constraintTop_toBottomOf="@+id/timestamp" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_observationImages"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            card_view:layout_constraintLeft_toRightOf="@id/note">
+            android:layout_marginTop="18dp"
+            card_view:layout_constraintTop_toBottomOf="@id/note">
 
         </androidx.recyclerview.widget.RecyclerView>
 

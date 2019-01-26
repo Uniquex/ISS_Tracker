@@ -24,16 +24,17 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:cardBackgroundColor="@color/colorDarkGrey">
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
-                <EditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/date"
                     android:layout_width="100dp"
+                    android:hint="@string/date"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
@@ -43,10 +44,11 @@
                     android:inputType="date"
                     android:textColor="@android:color/white" />
 
-                <EditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/time"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
+                    android:hint="@string/time"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
@@ -71,28 +73,41 @@
             app:layout_constraintTop_toBottomOf="@+id/cv_date"
             app:cardBackgroundColor="@color/colorDarkGrey">
 
-            <EditText
-                android:id="@+id/lat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:backgroundTint="@android:color/white"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:textColor="@android:color/white" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <EditText
-                android:id="@+id/lon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:backgroundTint="@android:color/white"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:textColor="@android:color/white" />
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/lat"
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/lat"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="@android:color/white"
+                    android:inputType="textPersonName"
+                    android:textColor="@android:color/white"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/lon"
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/lon"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:backgroundTint="@android:color/white"
+                    android:inputType="textPersonName"
+                    android:textColor="@android:color/white"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintLeft_toRightOf="@+id/lat"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </com.google.android.material.card.MaterialCardView>
 
 
@@ -107,11 +122,14 @@
             app:layout_constraintTop_toBottomOf="@+id/cv_lonlat"
             app:cardBackgroundColor="@color/colorDarkGrey">
 
-            <EditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/note"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
+                android:hint="@string/note"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
                 android:backgroundTint="@android:color/white"
                 android:ems="10"
                 android:inputType="textPersonName"
@@ -150,7 +168,7 @@
 
                 </androidx.recyclerview.widget.RecyclerView>
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_addImage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -168,24 +186,16 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-
-        <TextureView
-            android:id="@+id/textureView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:textColor="@android:color/white"
+            android:text="@string/save"
+            app:layout_constraintTop_toBottomOf="@id/cv_recylcer"
+            app:layout_constraintRight_toRightOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton-->
-        <!--android:id="@+id/fab_take_photo"-->
-        <!--android:layout_width="56dp"-->
-        <!--android:layout_height="56dp"-->
-        <!--android:layout_gravity="bottom|center"-->
-        <!--android:layout_marginBottom="24dp"-->
-        <!--android:src="@drawable/ic_baseline_control_camera"-->
-        <!--android:tint="@android:color/white"-->
-        <!--android:visibility="invisible"-->
-        <!--app:backgroundTint="@color/colorPrimary" />-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

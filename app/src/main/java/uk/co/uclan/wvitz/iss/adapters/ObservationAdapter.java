@@ -5,9 +5,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import uk.co.uclan.wvitz.iss.DT.Image;
 import uk.co.uclan.wvitz.iss.DT.Observation;
 import uk.co.uclan.wvitz.iss.R;
 
@@ -17,6 +20,7 @@ public class ObservationAdapter extends RecyclerView.Adapter<ObservationAdapter.
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView timestamp, lon, lat, note;
+        public RecyclerView observationImages;
 
         public MyViewHolder(View view) {
             super(view);
@@ -24,6 +28,7 @@ public class ObservationAdapter extends RecyclerView.Adapter<ObservationAdapter.
             lon = (TextView) view.findViewById(R.id.lon);
             lat = (TextView) view.findViewById(R.id.lat);
             note = (TextView) view.findViewById(R.id.note);
+            observationImages = view.findViewById(R.id.rv_observationImages);
         }
     }
 
@@ -43,10 +48,17 @@ public class ObservationAdapter extends RecyclerView.Adapter<ObservationAdapter.
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Observation observation = observationList.get(position);
-        holder.timestamp.setText(String.valueOf(observation.getTimestampFormated()));
+        holder.timestamp.setText(String.valueOf(observation.getTimestampFormatted()));
         holder.lat.setText(observation.getLatString());
         holder.lon.setText(observation.getLonString());
         holder.note.setText(observation.getNote());
+
+        // ObservationImageAdapter adapter = new ObservationImageAdapter(imageList);
+        ObservationImageAdapter adapter = new ObservationImageAdapter(observationList.get(position).getImagesFromContext());
+        holder.observationImages.setAdapter(adapter);
+        holder.observationImages.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(null, LinearLayoutManager.HORIZONTAL, false);
+        holder.observationImages.setLayoutManager(layoutManager);
     }
 
     @Override

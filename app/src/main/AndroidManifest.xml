@@ -35,7 +35,7 @@
             android:value="observations.db" />
         <meta-data
             android:name="VERSION"
-            android:value="1" />
+            android:value="1.1" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />
@@ -43,7 +43,6 @@
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="uk.co.uclan.wvitz.iss" />
 
-        <activity android:name=".Facts" />
         <activity android:name=".Observations" />
         <activity android:name=".PassTimes" />
         <activity android:name=".AddObservation" />

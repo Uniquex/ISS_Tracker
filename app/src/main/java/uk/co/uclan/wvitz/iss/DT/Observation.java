@@ -1,13 +1,17 @@
 package uk.co.uclan.wvitz.iss.DT;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Ignore;
 import com.orm.dsl.Unique;
+import com.orm.query.Condition;
+import com.orm.query.Select;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class Observation extends SugarRecord {
     @Unique long id;
@@ -15,18 +19,19 @@ public class Observation extends SugarRecord {
     String longitude;
     String latitude;
     String note;
-    ArrayList<byte[]> images;
+
+    @Ignore
+    List<Image> images;
 
     public Observation() {
 
     }
 
-    public Observation(long timestamp, String longitude, String latitude, String note, ArrayList<byte[]> images) {
+    public Observation(long timestamp, String longitude, String latitude, String note) {
         this.timestamp = timestamp;
         this.longitude = longitude;
         this.latitude = latitude;
         this.note = note;
-        this.images = images;
     }
 
 
@@ -62,14 +67,6 @@ public class Observation extends SugarRecord {
         this.note = note;
     }
 
-    public ArrayList<byte[]> getImages() {
-        return images;
-    }
-
-    public void setImages(ArrayList<byte[]> images) {
-        this.images = images;
-    }
-
     public String getLonString() {
         return "Lon: " + this.getLongitude();
     }
@@ -78,7 +75,7 @@ public class Observation extends SugarRecord {
         return "Lat: " + this.getLatitude();
     }
 
-    public String getTimestampFormated() {
+    public String getTimestampFormatted() {
 
         Date date = new Date(this.timestamp);
         Calendar now = Calendar.getInstance();
@@ -91,5 +88,15 @@ public class Observation extends SugarRecord {
             f = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         }
         return f.format(date);
+    }
+
+    public List<byte[]> getImagesFromContext() {
+        List<Image> images = Select.from(Image.class).where(Condition.prop("observation").eq(this)).list();
+        List<byte[]> list = new ArrayList<>();
+        for(int x = 0; x < images.size(); x++) {
+            list.add(images.get(x).getImage());
+        }
+
+        return list;
     }
 }
