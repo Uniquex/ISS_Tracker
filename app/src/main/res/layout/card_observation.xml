@@ -17,49 +17,64 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/timestamp"
-            android:layout_width="210dp"
+            android:layout_width="match_parent"
             android:layout_height="30sp"
             android:layout_margin="5dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:gravity="start"
             android:textColor="@android:color/white"
-            android:textSize="18sp"
-            card_view:layout_constraintStart_toStartOf="parent"/>
+            android:textSize="20sp"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent"/>
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="wrap_content"
+            android:id="@+id/latloncontainer"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            card_view:layout_constraintLeft_toRightOf="@+id/timestamp">
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            card_view:layout_constraintRight_toRightOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/timestamp">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/lon"
-                android:layout_width="100dp"
-                android:layout_height="20sp"
-                android:layout_margin="5dp"
+                android:layout_width="190dp"
+                android:layout_height="wrap_content"
                 android:textColor="@android:color/darker_gray"
-                android:textSize="15sp"/>
+                android:textSize="20sp"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/lat"
-                android:layout_width="100dp"
-                android:layout_height="20sp"
-                android:layout_margin="5dp"
+                android:layout_width="190dp"
+                android:layout_height="wrap_content"
                 android:textColor="@android:color/darker_gray"
-                android:textSize="15sp"/>
+                android:textSize="20sp"/>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/note"
-            android:layout_width="250dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:textColor="@android:color/white"
-            card_view:layout_constraintTop_toBottomOf="@+id/timestamp" />
+            card_view:layout_constraintTop_toBottomOf="@+id/latloncontainer"
+            card_view:layout_constraintStart_toStartOf="parent"
+            />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_observationImages"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             card_view:layout_constraintTop_toBottomOf="@id/note">

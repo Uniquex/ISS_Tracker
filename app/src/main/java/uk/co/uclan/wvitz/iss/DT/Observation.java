@@ -7,6 +7,7 @@ import com.orm.query.Condition;
 import com.orm.query.Select;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -68,11 +69,13 @@ public class Observation extends SugarRecord {
     }
 
     public String getLonString() {
-        return "Lon: " + this.getLongitude();
+        DecimalFormat df = new DecimalFormat("#.######");
+        return "Lon: " + df.format(Float.valueOf(this.getLongitude()));
     }
 
     public String getLatString() {
-        return "Lat: " + this.getLatitude();
+        DecimalFormat df = new DecimalFormat("#.######");
+        return "Lon: " + df.format(Float.valueOf(this.getLatitude()));
     }
 
     public String getTimestampFormatted() {
@@ -99,4 +102,6 @@ public class Observation extends SugarRecord {
 
         return list;
     }
+
+
 }

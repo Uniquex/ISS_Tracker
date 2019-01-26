@@ -1,6 +1,7 @@
 package uk.co.uclan.wvitz.iss;
 
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,9 +13,13 @@ import com.orm.query.Condition;
 import com.orm.query.Select;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import uk.co.uclan.wvitz.iss.DT.Image;
@@ -55,6 +60,7 @@ public class Observations extends AppCompatActivity {
         this.setOnlickListeners();
 
         readDBEntry();
+        setSwipe();
 
     }
 
@@ -71,15 +77,19 @@ public class Observations extends AppCompatActivity {
         SugarContext.terminate();
     }
 
-    public void createDBEntry() {
-        Long timestamp = System.currentTimeMillis();
-        Observation observation = new Observation(timestamp, "-93.3616", "50.9325", "Lorem ipsum at el dol met");
-        observation.save();
-    }
-
     public void readDBEntry() {
 
-        List<Observation> observations = Observation.listAll(Observation.class);
+        List<Observation> observations = Select.from(Observation.class).orderBy("timestamp").list();
+
+        Collections.sort(observations, new Comparator<Observation>() {
+
+            public int compare(Observation o1, Observation o2) {
+                long a = o1.getTimestamp(), b = o2.getTimestamp();
+                return a > b ? -1
+                        : a < b ? 1
+                        : 0;
+            }
+        });
 
         if(observations.size() == 0) {
             mRecyclerView.setVisibility(View.GONE);
@@ -93,6 +103,29 @@ public class Observations extends AppCompatActivity {
         mAdapter.notifyDataSetChanged();
 
         Log.d(TAG, "Observations: "+String.valueOf(observations.size()));
+    }
+
+    public void setSwipe() {
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                // Row is swiped from recycler view
+                // remove it from adapter
+            }
+
+            @Override
+            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                // view the background view
+            }
+        };
+
+// attaching the touch helper to recycler view
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mRecyclerView);
     }
 
 
