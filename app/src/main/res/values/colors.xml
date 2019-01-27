@@ -6,4 +6,5 @@
     <color name="background">#303030</color>
     <color name="font">#000000</color>
     <color name="colorDarkGrey">#484848</color>
+    <color name="bg_row_background">#fa315b</color>
 </resources>

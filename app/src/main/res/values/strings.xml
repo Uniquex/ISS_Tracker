@@ -42,4 +42,5 @@
     <string name="orbits_per_day_s">Orbits per day</string>
     <string name="orbit_period">92.68 min</string>
     <string name="orbit_period_s">Orbit period</string>
+    <string name="delete">DELETE</string>
 </resources>

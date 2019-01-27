@@ -1,9 +1,14 @@
 package uk.co.uclan.wvitz.iss.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.google.android.material.card.MaterialCardView;
+import com.orm.SugarContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,14 +26,17 @@ public class ObservationAdapter extends RecyclerView.Adapter<ObservationAdapter.
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView timestamp, lon, lat, note;
         public RecyclerView observationImages;
+        public RelativeLayout viewBackground, viewForeground;
 
         public MyViewHolder(View view) {
             super(view);
-            timestamp = (TextView) view.findViewById(R.id.timestamp);
-            lon = (TextView) view.findViewById(R.id.lon);
-            lat = (TextView) view.findViewById(R.id.lat);
-            note = (TextView) view.findViewById(R.id.note);
+            timestamp = view.findViewById(R.id.timestamp);
+            lon = view.findViewById(R.id.lon);
+            lat = view.findViewById(R.id.lat);
+            note = view.findViewById(R.id.note);
             observationImages = view.findViewById(R.id.rv_observationImages);
+            viewBackground = view.findViewById(R.id.view_background);
+            viewForeground = view.findViewById(R.id.view_foreground);
         }
     }
 
@@ -41,7 +49,6 @@ public class ObservationAdapter extends RecyclerView.Adapter<ObservationAdapter.
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_observation, parent, false);
-
         return new MyViewHolder(itemView);
     }
 
@@ -64,5 +71,18 @@ public class ObservationAdapter extends RecyclerView.Adapter<ObservationAdapter.
     @Override
     public int getItemCount() {
         return observationList.size();
+    }
+
+    public void removeItem(int position) {
+        Observation observation = observationList.get(position);
+        observationList.remove(position);
+        Observation.delete(observation);
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(Observation item, int position) {
+        observationList.add(position, item);
+        Observation.save(item);
+        notifyItemInserted(position);
     }
 }
