@@ -131,7 +131,6 @@
                 android:id="@+id/rv_observationImages"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
                 card_view:layout_constraintTop_toBottomOf="@id/note">
 
             </androidx.recyclerview.widget.RecyclerView>

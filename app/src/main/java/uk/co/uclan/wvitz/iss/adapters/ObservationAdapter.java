@@ -1,21 +1,15 @@
 package uk.co.uclan.wvitz.iss.adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.material.card.MaterialCardView;
-import com.orm.SugarContext;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import uk.co.uclan.wvitz.iss.DT.Image;
 import uk.co.uclan.wvitz.iss.DT.Observation;
 import uk.co.uclan.wvitz.iss.R;
 

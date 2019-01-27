@@ -2,13 +2,13 @@
     <string name="app_name">ISS Tracker</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_title">Iss Tracker</string>
+    <string name="nav_header_subtitle">https://github.com/Uniquex/ISS_Tracker</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="observations">Observations</string>
     <string name="add_observation">Add Observation</string>
-    <string name="current_crew">Current crew</string>
+    <string name="current_crew">Astronauts</string>
     <string name="current_location">Current location</string>
     <string name="future_pass_times">Future pass times</string>
     <string name="trivia_n_facts">Trivia and Facts</string>
@@ -16,7 +16,7 @@
     <string name="draw_marker_options_title">ISS</string>
     <string name="draw_marker_options_snippet">ISS 2</string>
     <string name="trivia_s">Trivia</string>
-    <string name="trivia">The International Space Station (ISS) is a space station, or a habitable artificial satellite, in low Earth orbit. Its first component launched into orbit in 1998, with the first long-term residents arriving in November 2000. It has been inhabited continuously since that date. The last pressurised module was fitted in 2011, and an experimental inflatable space habitat was added in 2016. The station is expected to operate until 2030. Development and assembly of the station continues, with several new elements scheduled for launch in 2019. The ISS is the largest human-made body in low Earth orbit and can often be seen with the naked eye from Earth. The ISS consists of pressurised habitation modules, structural trusses, solar arrays, radiators, docking ports, experiment bays and robotic arms. ISS components have been launched by Russian Proton and Soyuz rockets, and American Space Shuttles.</string>
+    <string name="trivia">The International Space Station (ISS) is a space station, or a habitable artificial satellite, in low Earth orbit. Its first component launched into orbit in 1998, with the first long-term residents arriving in November 2000. The last pressurised module was fitted in 2011, and an experimental inflatable space habitat was added in 2016. The station is expected to operate until 2030. Development and assembly of the station continues, with several new elements scheduled for launch in 2019. ISS components have been launched by Russian Proton and Soyuz rockets, and American Space Shuttles.</string>
     <string name="lon">Longitude</string>
     <string name="lat">Latitude</string>
     <string name="time">Time</string>

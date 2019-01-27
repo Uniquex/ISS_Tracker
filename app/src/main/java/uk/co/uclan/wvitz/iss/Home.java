@@ -45,6 +45,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import cz.msebera.android.httpclient.Header;
@@ -136,6 +137,7 @@ public class Home extends AppCompatActivity
 
         recyclerView = findViewById(R.id.rv_astronauts);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, layoutManager.getOrientation()));
         recyclerView.setAdapter(aAdapter);
 
         getAstronatus();
@@ -148,23 +150,13 @@ public class Home extends AppCompatActivity
     }
 
     public void setOnClickListeners() {
-        mapButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                toggleMap();
-            }
-        });
+        mapButton.setOnClickListener(view -> toggleMap());
 
-        locCard.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                toggleMap();
-            }
-        });
+        locCard.setOnClickListener(view -> toggleMap());
 
-        navCard.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Intent myIntent = new Intent(view.getContext(), TriviaFacts.class);
-                startActivity(myIntent);
-            }
+        navCard.setOnClickListener(view -> {
+            Intent myIntent = new Intent(view.getContext(), TriviaFacts.class);
+            startActivity(myIntent);
         });
     }
 
@@ -238,6 +230,8 @@ public class Home extends AppCompatActivity
             }
 
             this.aAdapter.notifyDataSetChanged();
+            TextView astroTitle = findViewById(R.id.astroTitle);
+            astroTitle.setText(aList.size()+ " " + astroTitle.getText());
 
             Log.i("Main", aList.toString());
 

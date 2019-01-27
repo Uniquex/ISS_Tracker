@@ -40,7 +40,7 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/CardLocMap"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="400dp"
         app:layout_constraintTop_toBottomOf="@id/CardLoc">
 
         <com.mapbox.mapboxsdk.maps.MapView
