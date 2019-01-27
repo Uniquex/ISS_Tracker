@@ -8,7 +8,7 @@ android {
     }
     defaultConfig {
         applicationId "uk.co.uclan.wvitz.iss"
-        minSdkVersion 24
+        minSdkVersion 27
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -22,6 +22,8 @@ android {
         }
     }
     buildToolsVersion '28.0.3'
+    productFlavors {
+    }
 }
 
 repositories {
@@ -32,20 +34,17 @@ repositories {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.google.android.material:material:1.1.0-alpha02'
-
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0-alpha01'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     // https://mvnrepository.com/artifact/androidx.drawerlayout/drawerlayout
-    implementation group: 'androidx.drawerlayout', name: 'drawerlayout', version: '1.0.0'
-
-
+    implementation 'androidx.drawerlayout:drawerlayout:1.0.0'
     implementation 'com.loopj.android:android-async-http:1.4.9'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:6.8.1'
     implementation 'com.github.satyan:sugar:1.5'
-
+    implementation 'com.github.esafirm:android-image-picker:2.0.0-alpha'
     implementation('com.wdullaer:materialdatetimepicker:4.1.1') {
         exclude group: 'androidx.appcompat'
     }
@@ -54,7 +53,5 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
-
     implementation 'androidx.multidex:multidex:2.0.1'
-
 }
