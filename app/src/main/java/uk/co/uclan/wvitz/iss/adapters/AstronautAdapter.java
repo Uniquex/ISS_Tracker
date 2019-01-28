@@ -1,4 +1,4 @@
-package uk.co.uclan.wvitz.iss;
+package uk.co.uclan.wvitz.iss.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +9,7 @@ import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 import uk.co.uclan.wvitz.iss.DT.Astronaut;
+import uk.co.uclan.wvitz.iss.R;
 
 public class AstronautAdapter extends RecyclerView.Adapter<AstronautAdapter.MyViewHolder> {
 
@@ -32,7 +33,7 @@ public class AstronautAdapter extends RecyclerView.Adapter<AstronautAdapter.MyVi
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_layout, parent, false);
+                .inflate(R.layout.card_astronaut, parent, false);
 
         return new MyViewHolder(itemView);
     }

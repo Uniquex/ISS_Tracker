@@ -1,15 +1,20 @@
 package uk.co.uclan.wvitz.iss.adapters;
 
+import android.content.Intent;
+import android.content.res.ObbScanner;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.material.card.MaterialCardView;
+
 import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import uk.co.uclan.wvitz.iss.AddObservation;
 import uk.co.uclan.wvitz.iss.DT.Observation;
 import uk.co.uclan.wvitz.iss.R;
 
@@ -21,6 +26,8 @@ public class ObservationAdapter extends RecyclerView.Adapter<ObservationAdapter.
         public TextView timestamp, lon, lat, note;
         public RecyclerView observationImages;
         public RelativeLayout viewBackground, viewForeground;
+        public MaterialCardView observationC;
+        public View view;
 
         public MyViewHolder(View view) {
             super(view);
@@ -31,9 +38,19 @@ public class ObservationAdapter extends RecyclerView.Adapter<ObservationAdapter.
             observationImages = view.findViewById(R.id.rv_observationImages);
             viewBackground = view.findViewById(R.id.view_background);
             viewForeground = view.findViewById(R.id.view_foreground);
+
+            observationC = view.findViewById(R.id.cardObservation);
+            this.view = view;
+        }
+
+        public void onClick(Observation observation) {
+            this.observationC.setOnClickListener(v -> {
+                Intent intent = new Intent (this.view.getContext(), AddObservation.class);
+                intent.putExtra("observation", observation);
+                this.view.getContext().startActivity(intent);
+            });
         }
     }
-
 
     public ObservationAdapter(List<Observation> observationList) {
         this.observationList = observationList;
@@ -53,6 +70,7 @@ public class ObservationAdapter extends RecyclerView.Adapter<ObservationAdapter.
         holder.lat.setText(observation.getLatString());
         holder.lon.setText(observation.getLonString());
         holder.note.setText(observation.getNote());
+        holder.onClick(observation);
 
         // ObservationImageAdapter adapter = new ObservationImageAdapter(imageList);
         ObservationImageAdapter adapter = new ObservationImageAdapter(observationList.get(position).getImagesFromContext());

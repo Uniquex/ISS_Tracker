@@ -23,6 +23,8 @@ import android.widget.Toast;
 import com.esafirm.imagepicker.features.ImagePicker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.orm.SugarContext;
+import com.orm.query.Condition;
+import com.orm.query.Select;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 
 import java.io.ByteArrayOutputStream;
@@ -55,8 +57,6 @@ public class AddObservation extends AppCompatActivity implements TimePickerDialo
     private EditText et_note;
     private Button btn_addImage;
     private Button btn_save;
-    private TextureView textureView;
-    private FloatingActionButton mImageFAB;
 
     private ArrayList<byte[]> images = new ArrayList<>();
 
@@ -71,6 +71,10 @@ public class AddObservation extends AppCompatActivity implements TimePickerDialo
     private final String TAG = "AddObservation";
 
     private final int PICK_PHOTO_CODE = 123;
+
+    private boolean edit = false;
+
+    private Observation observation;
 
 
     @Override
@@ -103,6 +107,21 @@ public class AddObservation extends AppCompatActivity implements TimePickerDialo
 
         });
 
+
+        if (getIntent().hasExtra("observation")) {
+            Bundle data = getIntent().getExtras();
+            try {
+                Observation obs = data.getParcelable("observation");
+                setFields(obs);
+                this.edit = true;
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        } else {
+            this.setCurrentLocation();
+            this.setCurrentTime();
+        }
+
         et_date.setOnTouchListener((v, event) -> {
             showDatePicker();
             return true;
@@ -117,8 +136,39 @@ public class AddObservation extends AppCompatActivity implements TimePickerDialo
             this.saveData();
         });
 
-        this.setCurrentLocation();
-        this.setCurrentTime();
+
+    }
+
+    public void setFields(Observation observation) {
+        Calendar ts = Calendar.getInstance();
+        ts.setTimeInMillis(observation.getTimestamp());
+
+        List<Observation> obs = Select.from(Observation.class).list();
+        Log.i(TAG, String.valueOf(observation.getIdentifier()));
+        Observation observ = Select.from(Observation.class).where(Condition.prop("id").eq(observation.getIdentifier())).first();
+
+        this.observation = observ;
+        this.timestamp = this.observation.getTimestamp();
+
+        this.et_note.setText(this.observation.getNote());
+        this.et_lon.setText(this.observation.getLongitude());
+        this.et_lat.setText(this.observation.getLatitude());
+        this.setTVTime(ts.get(Calendar.HOUR), ts.get(Calendar.MINUTE));
+        this.setTVDate(ts.get(Calendar.YEAR), ts.get(Calendar.MONTH), ts.get(Calendar.DAY_OF_MONTH));
+
+
+
+        new Thread( () -> {
+            {
+                List<byte[]> list = this.observation.getImagesFromContext();
+                if(list.size() != 0) {
+                    images.addAll(list);
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+        }).start();
+
+
     }
 
     public void setCurrentTime() {
@@ -235,9 +285,19 @@ public class AddObservation extends AppCompatActivity implements TimePickerDialo
     }
 
     public void saveData() {
-        Observation observation = new Observation(this.timestamp, this.et_lon.getText().toString(), this.et_lat.getText().toString(), this.et_note.getText().toString());
-        observation.save();
 
+        if (edit) {
+            this.observation.setLatitude(et_lat.getText().toString());
+            this.observation.setLongitude(et_lon.getText().toString());
+            this.observation.setNote(et_note.getText().toString());
+            this.observation.setTimestamp(this.timestamp);
+
+            Observation.update(this.observation);
+        } else {
+
+            Observation observation = new Observation(this.timestamp, this.et_lon.getText().toString(), this.et_lat.getText().toString(), this.et_note.getText().toString());
+            observation.save();
+        }
         for (int x = 0; x < images.size(); x++) {
             Image im = new Image(observation, images.get(x));
             im.save();
@@ -246,6 +306,7 @@ public class AddObservation extends AppCompatActivity implements TimePickerDialo
 
         Intent myIntent = new Intent(this, Observations.class);
         startActivity(myIntent);
+
     }
 
     public void openImageSelector() {

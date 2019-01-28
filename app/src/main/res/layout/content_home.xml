@@ -55,7 +55,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/mapButton2"
+                android:id="@+id/btn_trivia"
                 android:layout_width="65dp"
                 android:layout_height="match_parent"
                 android:backgroundTint="@android:color/transparent"

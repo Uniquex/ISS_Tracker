@@ -1,5 +1,8 @@
 package uk.co.uclan.wvitz.iss.DT;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
 import com.orm.dsl.Unique;
@@ -14,7 +17,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class Observation extends SugarRecord {
+
+public class Observation extends SugarRecord implements Parcelable {
     @Unique long id;
     long timestamp;
     String longitude;
@@ -33,6 +37,19 @@ public class Observation extends SugarRecord {
         this.longitude = longitude;
         this.latitude = latitude;
         this.note = note;
+    }
+
+    public Observation(Parcel in){
+
+        String[] data = new String[5];
+        in.readStringArray(data);
+
+        // the order needs to be the same as in writeToParcel() method
+        this.id = Integer.parseInt(data[0]);
+        this.longitude = data[1];
+        this.latitude = data[2];
+        this.note = data[3];
+        this.timestamp = Long.parseLong(data[4]);
     }
 
 
@@ -66,6 +83,10 @@ public class Observation extends SugarRecord {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public long getIdentifier() {
+        return id;
     }
 
     public String getLonString() {
@@ -104,4 +125,28 @@ public class Observation extends SugarRecord {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeStringArray(new String[] {
+                String.valueOf(this.id),
+                this.longitude,
+                this.latitude,
+                this.note,
+                String.valueOf(this.timestamp)});
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Observation createFromParcel(Parcel in) {
+            return new Observation(in);
+        }
+
+        public Observation[] newArray(int size) {
+            return new Observation[size];
+        }
+    };
 }

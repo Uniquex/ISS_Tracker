@@ -50,6 +50,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import cz.msebera.android.httpclient.Header;
 import uk.co.uclan.wvitz.iss.DT.Astronaut;
+import uk.co.uclan.wvitz.iss.adapters.AstronautAdapter;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
@@ -65,11 +66,8 @@ public class Home extends AppCompatActivity
     private String lat;
     private ConstraintLayout constraintLayout;
     private MapView mapView;
-    private Button mapButton;
-    private MaterialCardView mapCard;
-    private MaterialCardView locCard;
-    private MaterialCardView astroCard;
-    private MaterialCardView navCard;
+    private Button mapButton, triviaButton;
+    private MaterialCardView mapCard, locCard, astroCard, navCard;
     private DrawerLayout drawer;
 
     private ConstraintSet mCSet1 = new ConstraintSet(); // create a Constraint Set
@@ -124,7 +122,7 @@ public class Home extends AppCompatActivity
         navCard = findViewById(R.id.CardNav);
 
         mapButton = findViewById(R.id.mapButton);
-
+        triviaButton = findViewById(R.id.btn_trivia);
 
         setLayout();
 
@@ -158,6 +156,11 @@ public class Home extends AppCompatActivity
             Intent myIntent = new Intent(view.getContext(), TriviaFacts.class);
             startActivity(myIntent);
         });
+
+        triviaButton.setOnClickListener(view -> {
+            Intent myIntent = new Intent(view.getContext(), TriviaFacts.class);
+            startActivity(myIntent);
+        });
     }
 
     @Override
@@ -186,7 +189,8 @@ public class Home extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent myIntent = new Intent(this, SettingsActivity.class);
+            startActivity(myIntent);
         }
 
         return super.onOptionsItemSelected(item);

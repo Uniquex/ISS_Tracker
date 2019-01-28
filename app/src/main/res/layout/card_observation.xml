@@ -58,6 +58,7 @@
 
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardObservation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -73,7 +74,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/timestamp"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="30sp"
                 android:layout_margin="5dp"
                 android:layout_marginLeft="8dp"
@@ -85,6 +86,18 @@
                 android:textSize="20sp"
                 card_view:layout_constraintStart_toStartOf="parent"
                 card_view:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_edit"
+                android:layout_width="65dp"
+                android:layout_height="match_parent"
+                android:backgroundTint="@android:color/transparent"
+                android:drawableTint="@android:color/white"
+                android:stateListAnimator="@null"
+                card_view:icon="@drawable/ic_m_baseline_edit"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent"
+                card_view:backgroundTint="@color/colorDarkGrey"/>
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/latloncontainer"

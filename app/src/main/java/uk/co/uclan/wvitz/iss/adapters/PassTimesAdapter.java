@@ -1,7 +1,6 @@
-package uk.co.uclan.wvitz.iss;
+package uk.co.uclan.wvitz.iss.adapters;
 
 import android.app.Activity;
-import android.content.Context;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,8 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
-import uk.co.uclan.wvitz.iss.DT.Astronaut;
 import uk.co.uclan.wvitz.iss.DT.PassTime;
+import uk.co.uclan.wvitz.iss.R;
 
 public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.MyViewHolder> {
 
@@ -50,7 +49,7 @@ public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.MyVi
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.pass_time_card, parent, false);
+                .inflate(R.layout.card_pass_time, parent, false);
         Log.d("Main", "onCreateViewHolder: Created itemView");
         return new MyViewHolder(itemView);
     }
