@@ -113,6 +113,7 @@ public class AddObservation extends AppCompatActivity implements TimePickerDialo
             try {
                 Observation obs = data.getParcelable("observation");
                 setFields(obs);
+                deactivateFields();
                 this.edit = true;
             } catch (NullPointerException e) {
                 e.printStackTrace();
@@ -139,6 +140,17 @@ public class AddObservation extends AppCompatActivity implements TimePickerDialo
 
     }
 
+    public void deactivateFields() {
+        this.et_time.setFocusable(false);
+        this.et_time.setEnabled(false);
+        this.et_date.setFocusable(false);
+        this.et_date.setEnabled(false);
+        this.et_lon.setFocusable(false);
+        this.et_lon.setEnabled(false);
+        this.et_lat.setFocusable(false);
+        this.et_lat.setEnabled(false);
+    }
+
     public void setFields(Observation observation) {
         Calendar ts = Calendar.getInstance();
         ts.setTimeInMillis(observation.getTimestamp());
@@ -151,8 +163,8 @@ public class AddObservation extends AppCompatActivity implements TimePickerDialo
         this.timestamp = this.observation.getTimestamp();
 
         this.et_note.setText(this.observation.getNote());
-        this.et_lon.setText(this.observation.getLongitude());
-        this.et_lat.setText(this.observation.getLatitude());
+        this.et_lon.setText(this.observation.getLonFormatted());
+        this.et_lat.setText(this.observation.getLatFormatted());
         this.setTVTime(ts.get(Calendar.HOUR), ts.get(Calendar.MINUTE));
         this.setTVDate(ts.get(Calendar.YEAR), ts.get(Calendar.MONTH), ts.get(Calendar.DAY_OF_MONTH));
 
@@ -293,15 +305,24 @@ public class AddObservation extends AppCompatActivity implements TimePickerDialo
             this.observation.setTimestamp(this.timestamp);
 
             Observation.update(this.observation);
+
+            for (int x = 0; x < images.size(); x++) {
+                Image im = new Image(this.observation, images.get(x));
+                im.save();
+            }
+
         } else {
 
             Observation observation = new Observation(this.timestamp, this.et_lon.getText().toString(), this.et_lat.getText().toString(), this.et_note.getText().toString());
             observation.save();
+
+            for (int x = 0; x < images.size(); x++) {
+                Image im = new Image(observation, images.get(x));
+                im.save();
+            }
         }
-        for (int x = 0; x < images.size(); x++) {
-            Image im = new Image(observation, images.get(x));
-            im.save();
-        }
+
+
 
 
         Intent myIntent = new Intent(this, Observations.class);

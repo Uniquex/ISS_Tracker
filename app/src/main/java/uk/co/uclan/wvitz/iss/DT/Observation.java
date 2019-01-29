@@ -90,12 +90,21 @@ public class Observation extends SugarRecord implements Parcelable {
     }
 
     public String getLonString() {
-        DecimalFormat df = new DecimalFormat("#.######");
+        DecimalFormat df = new DecimalFormat("#.####");
         return "Lon: " + df.format(Float.valueOf(this.getLongitude()));
     }
 
+    public String getLonFormatted() {
+        DecimalFormat df = new DecimalFormat("#.####");
+        return df.format(Float.valueOf(this.getLongitude()));
+    }
+    public String getLatFormatted() {
+        DecimalFormat df = new DecimalFormat("#.####");
+        return df.format(Float.valueOf(this.getLatitude()));
+    }
+
     public String getLatString() {
-        DecimalFormat df = new DecimalFormat("#.######");
+        DecimalFormat df = new DecimalFormat("#.####");
         return "Lon: " + df.format(Float.valueOf(this.getLatitude()));
     }
 

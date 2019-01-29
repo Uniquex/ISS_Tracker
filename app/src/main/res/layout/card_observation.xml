@@ -57,100 +57,106 @@
         android:layout_height="match_parent">
 
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardObservation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:orientation="horizontal"
-        card_view:cardBackgroundColor="@color/colorDarkGrey"
-        card_view:cardCornerRadius="0dp"
-        card_view:cardUseCompatPadding="true">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardObservation"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?android:selectableItemBackground">
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:orientation="horizontal"
+            card_view:cardBackgroundColor="@color/colorDarkGrey"
+            card_view:cardCornerRadius="0dp"
+            card_view:cardUseCompatPadding="true">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/timestamp"
-                android:layout_width="wrap_content"
-                android:layout_height="30sp"
-                android:layout_margin="5dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
-                android:gravity="start"
-                android:textColor="@android:color/white"
-                android:textSize="20sp"
-                card_view:layout_constraintStart_toStartOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_edit"
-                android:layout_width="65dp"
-                android:layout_height="match_parent"
-                android:backgroundTint="@android:color/transparent"
-                android:drawableTint="@android:color/white"
-                android:stateListAnimator="@null"
-                card_view:icon="@drawable/ic_m_baseline_edit"
-                card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent"
-                card_view:backgroundTint="@color/colorDarkGrey"/>
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/latloncontainer"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
-                android:orientation="horizontal"
-                card_view:layout_constraintRight_toRightOf="parent"
-                card_view:layout_constraintTop_toBottomOf="@+id/timestamp">
+                android:layout_height="match_parent"
+                android:background="?android:selectableItemBackground">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/timestamp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30sp"
+                    android:layout_margin="5dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="start"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    card_view:layout_constraintStart_toStartOf="parent"
+                    card_view:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_edit"
+                    android:layout_width="65dp"
+                    android:layout_height="40dp"
+                    android:backgroundTint="@android:color/transparent"
+                    android:drawableTint="@android:color/white"
+                    android:stateListAnimator="@null"
+                    card_view:backgroundTint="@color/colorDarkGrey"
+                    card_view:icon="@drawable/ic_m_baseline_edit"
+                    card_view:layout_constraintEnd_toEndOf="parent"
+                    card_view:layout_constraintTop_toTopOf="parent" />
+
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/lon"
-                    android:layout_width="190dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
                     android:textColor="@android:color/darker_gray"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    card_view:layout_constraintStart_toStartOf="parent"
+                    card_view:layout_constraintTop_toBottomOf="@id/btn_edit" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/lat"
-                    android:layout_width="190dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
                     android:textColor="@android:color/darker_gray"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    card_view:layout_constraintLeft_toRightOf="@id/lon"
+                    card_view:layout_constraintTop_toTopOf="@id/lon" />
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_map"
+                    android:layout_width="65dp"
+                    android:layout_height="40dp"
+                    android:backgroundTint="@android:color/transparent"
+                    android:drawableTint="@android:color/white"
+                    android:stateListAnimator="@null"
+                    card_view:backgroundTint="@color/colorDarkGrey"
+                    card_view:icon="@drawable/ic_m_baseline_map"
+                    card_view:layout_constraintEnd_toEndOf="parent"
+                    card_view:layout_constraintTop_toTopOf="@id/lon" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/note"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:textColor="@android:color/white"
+                    card_view:layout_constraintStart_toStartOf="parent"
+                    card_view:layout_constraintTop_toBottomOf="@+id/btn_map" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_observationImages"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    card_view:layout_constraintTop_toBottomOf="@id/note">
+
+                </androidx.recyclerview.widget.RecyclerView>
 
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/note"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
-                android:textColor="@android:color/white"
-                card_view:layout_constraintStart_toStartOf="parent"
-                card_view:layout_constraintTop_toBottomOf="@+id/latloncontainer" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_observationImages"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                card_view:layout_constraintTop_toBottomOf="@id/note">
 
-            </androidx.recyclerview.widget.RecyclerView>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </com.google.android.material.card.MaterialCardView>
+        </com.google.android.material.card.MaterialCardView>
 
     </RelativeLayout>
 
