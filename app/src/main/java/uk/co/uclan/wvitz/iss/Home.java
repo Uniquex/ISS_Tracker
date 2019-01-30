@@ -213,6 +213,11 @@ public class Home extends AppCompatActivity
                 startActivity(myIntent);
                 break;
             }
+            case R.id.nav_settings: {
+                Intent myIntent = new Intent(this, SettingsActivity.class);
+                startActivity(myIntent);
+                break;
+            }
         }
 
         drawer.closeDrawer(GravityCompat.START);
