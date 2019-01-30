@@ -56,6 +56,8 @@ public class ObservationImageAdapter extends RecyclerView.Adapter<ObservationIma
 
     }
 
+
+
     @Override
     public int getItemCount() {
         return imageList.size();

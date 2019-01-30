@@ -163,5 +163,13 @@ public class Observations extends AppCompatActivity implements RecyclerItemTouch
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mAdapter != null) {
+            mAdapter.notifyAdapterDataSetChanged();
+        }
+    }
+
 
 }

@@ -133,6 +133,10 @@ public class Observation extends SugarRecord implements Parcelable {
         return list;
     }
 
+    public List<Image> getImagesCFromContext() {
+        return Select.from(Image.class).where(Condition.prop("observation").eq(this)).list();
+    }
+
 
     @Override
     public int describeContents() {

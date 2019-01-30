@@ -11,6 +11,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.TextureView;
@@ -44,6 +45,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import uk.co.uclan.wvitz.iss.DT.Image;
 import uk.co.uclan.wvitz.iss.DT.Observation;
 import uk.co.uclan.wvitz.iss.adapters.ObservationImageAdapter;
+import uk.co.uclan.wvitz.iss.adapters.ObservationImageAdapterAdd;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
@@ -58,10 +60,11 @@ public class AddObservation extends AppCompatActivity implements TimePickerDialo
     private Button btn_addImage;
     private Button btn_save;
 
-    private ArrayList<byte[]> images = new ArrayList<>();
+    private ArrayList<Image> images = new ArrayList<>();
+    private ArrayList<Image> toDelete = new ArrayList<>();
 
     private RecyclerView mRecyclerView;
-    private ObservationImageAdapter mAdapter;
+    private ObservationImageAdapterAdd mAdapter;
     private LinearLayoutManager mLinearLayoutManager;
     private long timestamp;
     private int m_day, m_month, m_year, m_hour, m_minute;
@@ -92,7 +95,7 @@ public class AddObservation extends AppCompatActivity implements TimePickerDialo
         this.btn_addImage = findViewById(R.id.btn_addImage);
         this.btn_save = findViewById(R.id.btn_save);
 
-        mAdapter = new ObservationImageAdapter(images);
+        mAdapter = new ObservationImageAdapterAdd(images);
 
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
@@ -172,7 +175,7 @@ public class AddObservation extends AppCompatActivity implements TimePickerDialo
 
         new Thread( () -> {
             {
-                List<byte[]> list = this.observation.getImagesFromContext();
+                List<Image> list = this.observation.getImagesCFromContext();
                 if(list.size() != 0) {
                     images.addAll(list);
                     mAdapter.notifyDataSetChanged();
@@ -307,8 +310,18 @@ public class AddObservation extends AppCompatActivity implements TimePickerDialo
             Observation.update(this.observation);
 
             for (int x = 0; x < images.size(); x++) {
-                Image im = new Image(this.observation, images.get(x));
-                im.save();
+                if(images.get(x).getObservation() == null) {
+                    Image im = new Image(this.observation, images.get(x).getImage());
+                    im.save();
+                    images.remove(x);
+                    x--;
+                }
+            }
+
+            this.toDelete = mAdapter.getDeleteList();
+
+            for(int i = 0; i < toDelete.size(); i++) {
+                Image.delete(toDelete.get(i));
             }
 
         } else {
@@ -317,13 +330,10 @@ public class AddObservation extends AppCompatActivity implements TimePickerDialo
             observation.save();
 
             for (int x = 0; x < images.size(); x++) {
-                Image im = new Image(observation, images.get(x));
+                Image im = new Image(observation, images.get(x).getImage());
                 im.save();
             }
         }
-
-
-
 
         Intent myIntent = new Intent(this, Observations.class);
         startActivity(myIntent);
@@ -342,7 +352,7 @@ public class AddObservation extends AppCompatActivity implements TimePickerDialo
             List<com.esafirm.imagepicker.model.Image> images = ImagePicker.getImages(data);
             for (int x = 0; x < images.size(); x++) {
 
-                this.images.add(this.compressImage(images.get(x).getPath()));
+                this.images.add(new Image(null, this.compressImage(images.get(x).getPath())));
 
             }
             this.mAdapter.notifyDataSetChanged();

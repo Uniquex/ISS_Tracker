@@ -25,6 +25,8 @@ import uk.co.uclan.wvitz.iss.R;
 public class ObservationAdapter extends RecyclerView.Adapter<ObservationAdapter.MyViewHolder> {
 
     private List<Observation> observationList;
+    private MyViewHolder viewHolder;
+    private ObservationImageAdapter mAdapter;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView timestamp, lon, lat, note;
@@ -83,6 +85,7 @@ public class ObservationAdapter extends RecyclerView.Adapter<ObservationAdapter.
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
+        this.viewHolder = holder;
         Observation observation = observationList.get(position);
         holder.timestamp.setText(String.valueOf(observation.getTimestampFormatted()));
         holder.lat.setText(observation.getLatString());
@@ -91,8 +94,8 @@ public class ObservationAdapter extends RecyclerView.Adapter<ObservationAdapter.
         holder.onClick(observation);
 
         // ObservationImageAdapter adapter = new ObservationImageAdapter(imageList);
-        ObservationImageAdapter adapter = new ObservationImageAdapter(observationList.get(position).getImagesFromContext());
-        holder.observationImages.setAdapter(adapter);
+        this.mAdapter = new ObservationImageAdapter(observationList.get(position).getImagesFromContext());
+        holder.observationImages.setAdapter(this.mAdapter);
         holder.observationImages.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(null, LinearLayoutManager.HORIZONTAL, false);
         holder.observationImages.setLayoutManager(layoutManager);
@@ -101,6 +104,13 @@ public class ObservationAdapter extends RecyclerView.Adapter<ObservationAdapter.
     @Override
     public int getItemCount() {
         return observationList.size();
+    }
+
+    public void notifyAdapterDataSetChanged() {
+        super.notifyDataSetChanged();
+        if(mAdapter != null) {
+            this.mAdapter.notifyDataSetChanged();
+        }
     }
 
     public void removeItem(int position) {
