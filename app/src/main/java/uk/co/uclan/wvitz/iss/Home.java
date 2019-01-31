@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 
 
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +25,7 @@ import com.loopj.android.http.*;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
+import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -36,6 +40,8 @@ import org.json.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -59,19 +65,25 @@ import static android.view.View.VISIBLE;
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private final String TAG = "main";
+
     private List<Astronaut> aList = new ArrayList<>();
     private RecyclerView recyclerView;
     private AstronautAdapter aAdapter;
-    private String lon;
-    private String lat;
     private ConstraintLayout constraintLayout;
     private MapView mapView;
     private Button mapButton, triviaButton;
     private MaterialCardView mapCard, locCard, astroCard, navCard;
     private DrawerLayout drawer;
+    private TextView tvLonLat;
+
+    private ArrayList<LatLng> pastLocations = new ArrayList<>();
+    private ArrayList<MarkerOptions> markers;
 
     private ConstraintSet mCSet1 = new ConstraintSet(); // create a Constraint Set
     private ConstraintSet mCSet2 = new ConstraintSet(); // create a Constraint Set
+
+    private boolean setFocus = false;
 
 
     @Override
@@ -79,60 +91,42 @@ public class Home extends AppCompatActivity
         super.onCreate(savedInstanceState);
         Mapbox.getInstance(this, "pk.eyJ1IjoidW5pcXVleCIsImEiOiJjanFnbGk2cXQxdDBoNDNwdDhibnUzYXp0In0.njtICx6oW5PCpc7M8rlNzQ");
         setContentView(R.layout.activity_home);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
             Intent myIntent = new Intent(v.getContext(), AddObservation.class);
             startActivity(myIntent);
         });
 
-
         // SUGAR
-
         SugarContext.init(this);
-
         SchemaGenerator schemaGenerator = new SchemaGenerator(this);
         schemaGenerator.createDatabase(new SugarDb(this).getDB());
-
-
         // DRAWER
-
         drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        //EDIT
 
         // Map View
         constraintLayout = findViewById(R.id.mainLayout);
         mapView = findViewById(R.id.mapView);
-
         mapCard = findViewById(R.id.CardLocMap);
         locCard = findViewById(R.id.CardLoc);
         astroCard = findViewById(R.id.CardAstro);
         navCard = findViewById(R.id.CardNav);
-
         mapButton = findViewById(R.id.mapButton);
         triviaButton = findViewById(R.id.btn_trivia);
-
+        tvLonLat = this.findViewById(R.id.TVlonlat);
         setLayout();
 
         // Astronauts
-
         aAdapter = new AstronautAdapter(aList);
-
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView = findViewById(R.id.rv_astronauts);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, layoutManager.getOrientation()));
@@ -140,9 +134,8 @@ public class Home extends AppCompatActivity
 
         getAstronatus();
         getIssLocation();
-        Log.i("Main", this.aList.toString());
 
-        // Button
+        // Buttons
         this.setOnClickListeners();
 
     }
@@ -240,7 +233,7 @@ public class Home extends AppCompatActivity
 
             this.aAdapter.notifyDataSetChanged();
             TextView astroTitle = findViewById(R.id.astroTitle);
-            astroTitle.setText(aList.size()+ " " + astroTitle.getText());
+            astroTitle.setText(aList.size() + " " + astroTitle.getText());
 
             Log.i("Main", aList.toString());
 
@@ -258,27 +251,25 @@ public class Home extends AppCompatActivity
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 setAstronatus(response);
             }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                Toast.makeText(getApplicationContext(), "cannot read json", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, java.lang.Throwable throwable, JSONObject response) {
-                Toast.makeText(getApplicationContext(), "no connection", Toast.LENGTH_LONG).show();
-            }
-
         });
     }
 
+    void setTvIssLoc(String lon,String lat) {
+        this.tvLonLat.setText("Lon: " + lon + " " + "Lat: " + lat);
+    }
+
     void setIssLocation(JSONObject obj) {
-        TextView tv = (TextView) this.findViewById(R.id.TVlonlat);
         try {
             JSONObject ob = (JSONObject) obj.get("iss_position");
-            this.lon = ob.get("longitude").toString();
-            this.lat = ob.get("latitude").toString();
-            tv.setText("Lon: " + this.lon + " " + "Lat: " + this.lat);
+            String lon = ob.get("longitude").toString();
+            String lat = ob.get("latitude").toString();
+
+            runOnUiThread(() ->
+                this.setTvIssLoc(lon, lat)
+            );
+
+
+
             this.setMapViewFocus(lon, lat);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -287,85 +278,99 @@ public class Home extends AppCompatActivity
 
     void getIssLocation() {
         // http://api.open-notify.org/iss-now.json
+            new Timer().scheduleAtFixedRate(new TimerTask() {
 
-        HttpClient.get("http://api.open-notify.org/iss-now.json", null, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                setIssLocation(response);
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                Toast.makeText(getApplicationContext(), "cannot read json", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, java.lang.Throwable throwable, JSONObject response) {
-                Toast.makeText(getApplicationContext(), "no connection", Toast.LENGTH_LONG).show();
-            }
-
-        });
-
+                @Override
+                public void run() {
+                    SyncHttpClient client = new SyncHttpClient();
+                    client.get("http://api.open-notify.org/iss-now.json", null, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            setIssLocation(response);
+                        }
+                    });
+                }
+            }, 0, 5000);
     }
 
-    void setMapViewFocus(String lon, String lat) {
+    public Icon convertDrawableToIcon(Drawable drawable, boolean secondary) {
+        Bitmap bitmap;
+        if(secondary) {
+             bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth()/2,
+                    drawable.getIntrinsicHeight()/2, Bitmap.Config.ARGB_8888);
 
-        Double lonD = Double.parseDouble(lon);
-        Double latD = Double.parseDouble(lat);
-
-        LatLng latLng = new LatLng(latD, lonD);
-
-        CameraPosition cpos = new CameraPosition.Builder()
-                .target(latLng)
-                .zoom(0)
-                .bearing(0)
-                .tilt(0)
-                .build();
+        } else {
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth()*2,
+                    drawable.getIntrinsicHeight()*2, Bitmap.Config.ARGB_8888);
+        }
 
 
-        // Convert SVG to Bitmap to display the ICON
 
-        Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_m_baseline_up);
-
-        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
-                drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
 
 
-        Icon icon = IconFactory.getInstance(Home.this).fromBitmap(bitmap);
+        return IconFactory.getInstance(Home.this).fromBitmap(bitmap);
+    }
 
-        mapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(MapboxMap mapboxMap) {
-                mapboxMap.addMarker(new MarkerOptions()
-                        .position(latLng)
-                        .icon(icon)
-                        .title(getString(R.string.draw_marker_options_title)));
-                //                     .snippet(getString(R.string.draw_marker_options_snippet)));
+    void setMapViewFocus(String lon, String lat) {
+        try {
+            LatLng latLng = new LatLng(Double.parseDouble(lat), Double.parseDouble(lon));
+            if(!this.pastLocations.contains(latLng)) {
+                this.pastLocations.add(latLng);
+            }
+
+            Log.i(TAG, latLng.toString() + "  " + pastLocations.size());
+
+            if(!pastLocations.isEmpty()) {
+                Icon iconpLoc = convertDrawableToIcon(ContextCompat.getDrawable(this, R.drawable.ic_m_baseline_arrow_drop_down_circle), true);
+
+                this.markers = new ArrayList<>();
+                for (int x = 0; x < pastLocations.size()-1; x++) {
+                    markers.add(new MarkerOptions()
+                            .position(this.pastLocations.get(x))
+                            .icon(iconpLoc));
+                }
+            }
+
+            runOnUiThread(() -> this.updateMap(latLng));
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateMap(LatLng latLng) {
+
+        Icon iconIss = convertDrawableToIcon(ContextCompat.getDrawable(this, R.drawable.ic_m_baseline_up), false);
+
+        CameraPosition cpos = new CameraPosition.Builder().target(latLng).zoom(0).bearing(0).tilt(0).build();
+
+        mapView.getMapAsync((mapboxMap) -> {
+            mapboxMap.removeAnnotations();
+            mapboxMap.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .icon(iconIss)
+                    .title(getString(R.string.draw_marker_options_title)));
+            mapboxMap.addMarkers(markers);
+            if(!setFocus) {
                 mapboxMap.setCameraPosition(cpos);
+                setFocus = true;
             }
         });
     }
 
     private void setLayout() {
-        boolean set = false;
-
         mCSet1.clone(this, R.layout.content_home);
         mCSet2.clone(this, R.layout.content_home_alt);
-
     }
 
     public void toggleMap() {
-
         switch (mapCard.getVisibility()) {
             case VISIBLE:
-                //mapCard.setVisibility(View.INVISIBLE);
                 mCSet1.applyTo(constraintLayout);
                 break;
             case INVISIBLE:
-                //mapCard.setVisibility(View.VISIBLE);
                 mCSet2.applyTo(constraintLayout);
             case GONE:
                 mapCard.setVisibility(View.VISIBLE);
