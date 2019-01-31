@@ -1,6 +1,5 @@
 package uk.co.uclan.wvitz.iss;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -9,12 +8,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.provider.MediaStore;
 import android.util.Log;
-import android.view.TextureView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -22,20 +17,16 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.esafirm.imagepicker.features.ImagePicker;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.orm.SugarContext;
 import com.orm.query.Condition;
 import com.orm.query.Select;
-import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,7 +35,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import uk.co.uclan.wvitz.iss.DT.Image;
 import uk.co.uclan.wvitz.iss.DT.Observation;
-import uk.co.uclan.wvitz.iss.adapters.ObservationImageAdapter;
 import uk.co.uclan.wvitz.iss.adapters.ObservationImageAdapterAdd;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -79,6 +69,8 @@ public class AddObservation extends AppCompatActivity implements TimePickerDialo
 
     private Observation observation;
 
+    private FusedLocationProviderClient mFusedLocationClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +95,9 @@ public class AddObservation extends AppCompatActivity implements TimePickerDialo
         mRecyclerView = findViewById(R.id.rv_images);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
 
         btn_addImage.setOnClickListener(v -> {
             //onPickPhoto();
@@ -172,11 +167,10 @@ public class AddObservation extends AppCompatActivity implements TimePickerDialo
         this.setTVDate(ts.get(Calendar.YEAR), ts.get(Calendar.MONTH), ts.get(Calendar.DAY_OF_MONTH));
 
 
-
-        new Thread( () -> {
+        new Thread(() -> {
             {
                 List<Image> list = this.observation.getImagesCFromContext();
-                if(list.size() != 0) {
+                if (list.size() != 0) {
                     images.addAll(list);
                     mAdapter.notifyDataSetChanged();
                 }
@@ -279,85 +273,85 @@ public class AddObservation extends AppCompatActivity implements TimePickerDialo
         Toast.makeText(this, "You picked the following time: " + hourOfDay + "h" + minute + "m", Toast.LENGTH_SHORT).show();
     }
 
-    public void setCurrentLocation() {
-        if (PermissionChecker.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PermissionChecker.PERMISSION_GRANTED) {
-            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-            try {
-                Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-                this.et_lat.setText(String.valueOf(loc.getLatitude()));
-                this.et_lon.setText(String.valueOf(loc.getLongitude()));
-
-            } catch (SecurityException e) {
-                e.printStackTrace();
-            }
-        } else {
-            Toast.makeText(this, "No permission for location access", Toast.LENGTH_LONG);
-        }
-
-
+    public void onLocationChange(Location location) {
+        this.et_lat.setText(String.valueOf(location.getLatitude()));
+        this.et_lon.setText(String.valueOf(location.getLongitude()));
     }
 
-    public void saveData() {
+    public void setCurrentLocation() {
+        if (PermissionChecker.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PermissionChecker.PERMISSION_GRANTED) {
+            mFusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+                if (location != null) {
+                    onLocationChange(location);
+                }
+            });
 
-        if (edit) {
-            this.observation.setLatitude(et_lat.getText().toString());
-            this.observation.setLongitude(et_lon.getText().toString());
-            this.observation.setNote(et_note.getText().toString());
-            this.observation.setTimestamp(this.timestamp);
+            } else{
+                Toast.makeText(this, "No permission for location access", Toast.LENGTH_LONG).show();
+            }
 
-            Observation.update(this.observation);
 
-            for (int x = 0; x < images.size(); x++) {
-                if(images.get(x).getObservation() == null) {
-                    Image im = new Image(this.observation, images.get(x).getImage());
+        }
+
+        public void saveData () {
+
+            if (edit) {
+                this.observation.setLatitude(et_lat.getText().toString());
+                this.observation.setLongitude(et_lon.getText().toString());
+                this.observation.setNote(et_note.getText().toString());
+                this.observation.setTimestamp(this.timestamp);
+
+                Observation.update(this.observation);
+
+                for (int x = 0; x < images.size(); x++) {
+                    if (images.get(x).getObservation() == null) {
+                        Image im = new Image(this.observation, images.get(x).getImage());
+                        im.save();
+                        images.remove(x);
+                        x--;
+                    }
+                }
+
+                this.toDelete = mAdapter.getDeleteList();
+
+                for (int i = 0; i < toDelete.size(); i++) {
+                    Image.delete(toDelete.get(i));
+                }
+
+            } else {
+
+                Observation observation = new Observation(this.timestamp, this.et_lon.getText().toString(), this.et_lat.getText().toString(), this.et_note.getText().toString());
+                observation.save();
+
+                for (int x = 0; x < images.size(); x++) {
+                    Image im = new Image(observation, images.get(x).getImage());
                     im.save();
-                    images.remove(x);
-                    x--;
                 }
             }
 
-            this.toDelete = mAdapter.getDeleteList();
+            Intent myIntent = new Intent(this, Observations.class);
+            startActivity(myIntent);
 
-            for(int i = 0; i < toDelete.size(); i++) {
-                Image.delete(toDelete.get(i));
-            }
-
-        } else {
-
-            Observation observation = new Observation(this.timestamp, this.et_lon.getText().toString(), this.et_lat.getText().toString(), this.et_note.getText().toString());
-            observation.save();
-
-            for (int x = 0; x < images.size(); x++) {
-                Image im = new Image(observation, images.get(x).getImage());
-                im.save();
-            }
         }
 
-        Intent myIntent = new Intent(this, Observations.class);
-        startActivity(myIntent);
-
-    }
-
-    public void openImageSelector() {
-        ImagePicker.create(this).start();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, final int resultCode, Intent data) {
-
-        if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
-
-            List<com.esafirm.imagepicker.model.Image> images = ImagePicker.getImages(data);
-            for (int x = 0; x < images.size(); x++) {
-
-                this.images.add(new Image(null, this.compressImage(images.get(x).getPath())));
-
-            }
-            this.mAdapter.notifyDataSetChanged();
+        public void openImageSelector () {
+            ImagePicker.create(this).start();
         }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
 
-}
+        @Override
+        protected void onActivityResult ( int requestCode, final int resultCode, Intent data){
+
+            if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
+
+                List<com.esafirm.imagepicker.model.Image> images = ImagePicker.getImages(data);
+                for (int x = 0; x < images.size(); x++) {
+
+                    this.images.add(new Image(null, this.compressImage(images.get(x).getPath())));
+
+                }
+                this.mAdapter.notifyDataSetChanged();
+            }
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+
+    }

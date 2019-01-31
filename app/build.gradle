@@ -40,6 +40,9 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     // https://mvnrepository.com/artifact/androidx.drawerlayout/drawerlayout
+
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+
     implementation 'androidx.drawerlayout:drawerlayout:1.0.0'
     implementation 'com.loopj.android:android-async-http:1.4.9'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:6.8.1'

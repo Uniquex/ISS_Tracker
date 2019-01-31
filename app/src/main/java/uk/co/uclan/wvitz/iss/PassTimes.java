@@ -8,6 +8,8 @@ import android.util.Log;
 
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -36,7 +38,7 @@ public class PassTimes extends AppCompatActivity {
     private PassTimesAdapter mAdapter;
     private LinearLayoutManager mLinearLayoutManager;
 
-    private LocationManager locationManager;
+    private FusedLocationProviderClient mFusedLocationClient;
 
     private List<PassTime> aList = new ArrayList<>();
 
@@ -60,46 +62,48 @@ public class PassTimes extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
-        getPassTimes();
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        getLocation();
     }
 
-    void getPassTimes() {
 
+    public void getLocation() {
         if (PermissionChecker.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PermissionChecker.PERMISSION_GRANTED) {
-            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            mFusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+                if (location != null) {
+                    getPassTimes(location);
+                }
+            });
 
-            try {
-                Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-                String query = "http://api.open-notify.org/iss-pass.json?lat=" + loc.getLatitude() + "&lon=" + loc.getLongitude() + "&n=5";
-
-                HttpClient.get(query, null, new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        setPassTimes(response);
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                        Toast.makeText(getApplicationContext(), "cannot read json", Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, java.lang.Throwable throwable, JSONObject response) {
-                        Toast.makeText(getApplicationContext(), "no connection", Toast.LENGTH_LONG).show();
-                    }
-
-                });
-
-
-            } catch (SecurityException e) {
-                e.printStackTrace();
-            }
         } else {
-            Toast.makeText(this, "No permission for location access", Toast.LENGTH_LONG);
+            Toast.makeText(this, "No permission for location access", Toast.LENGTH_LONG).show();
         }
+    }
 
 
+    public void getPassTimes(Location location) {
+        if (location != null) {
+            String query = "http://api.open-notify.org/iss-pass.json?lat=" + location.getLatitude() + "&lon=" + location.getLongitude() + "&n=5";
+
+            HttpClient.get(query, null, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    setPassTimes(response);
+                }
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                    Toast.makeText(getApplicationContext(), "cannot read json", Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, java.lang.Throwable throwable, JSONObject response) {
+                    Toast.makeText(getApplicationContext(), "no connection", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     void setPassTimes(JSONObject obj) {
@@ -110,10 +114,10 @@ public class PassTimes extends AppCompatActivity {
             for (int x = 0; x < jsonArray.length(); x++) {
                 JSONObject job = jsonArray.getJSONObject(x);
 
-                Double duratioD = ((Integer)job.get("duration")).doubleValue();
-                Long risetimeL = ((Integer)job.get("risetime")).longValue()*1000;
+                Double duratioD = ((Integer) job.get("duration")).doubleValue();
+                Long risetimeL = ((Integer) job.get("risetime")).longValue() * 1000;
 
-                int durationMin = (int) (duratioD%3600) / 60;
+                int durationMin = (int) (duratioD % 3600) / 60;
                 int durationSeconds = (int) (duratioD % 60);
 
 
@@ -138,7 +142,6 @@ public class PassTimes extends AppCompatActivity {
             np.printStackTrace();
         }
     }
-
 
 
 }
