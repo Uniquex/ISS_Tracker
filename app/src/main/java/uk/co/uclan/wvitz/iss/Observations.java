@@ -85,30 +85,34 @@ public class Observations extends AppCompatActivity implements RecyclerItemTouch
 
     public void readDBEntry() {
 
-        List<Observation> observations = Select.from(Observation.class).orderBy("timestamp").list();
+        try {
+            List<Observation> observations = Select.from(Observation.class).orderBy("timestamp").list();
 
-        Collections.sort(observations, new Comparator<Observation>() {
+            Collections.sort(observations, new Comparator<Observation>() {
 
-            public int compare(Observation o1, Observation o2) {
-                long a = o1.getTimestamp(), b = o2.getTimestamp();
-                return a > b ? -1
-                        : a < b ? 1
-                        : 0;
+                public int compare(Observation o1, Observation o2) {
+                    long a = o1.getTimestamp(), b = o2.getTimestamp();
+                    return a > b ? -1
+                            : a < b ? 1
+                            : 0;
+                }
+            });
+
+            if (observations.size() == 0) {
+                mRecyclerView.setVisibility(View.GONE);
+                mNoObservations.setVisibility(View.VISIBLE);
+            } else {
+                mRecyclerView.setVisibility(View.VISIBLE);
+                mNoObservations.setVisibility(View.GONE);
             }
-        });
 
-        if(observations.size() == 0) {
-            mRecyclerView.setVisibility(View.GONE);
-            mNoObservations.setVisibility(View.VISIBLE);
-        } else {
-            mRecyclerView.setVisibility(View.VISIBLE);
-            mNoObservations.setVisibility(View.GONE);
+            mList.addAll(observations);
+            mAdapter.notifyDataSetChanged();
+
+            Log.d(TAG, "Observations: " + String.valueOf(observations.size()));
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
         }
-
-        mList.addAll(observations);
-        mAdapter.notifyDataSetChanged();
-
-        Log.d(TAG, "Observations: "+String.valueOf(observations.size()));
     }
 
     public void setSwipe() {
