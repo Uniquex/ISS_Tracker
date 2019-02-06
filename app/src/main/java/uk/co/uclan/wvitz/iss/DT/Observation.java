@@ -105,7 +105,7 @@ public class Observation extends SugarRecord implements Parcelable {
 
     public String getLatString() {
         DecimalFormat df = new DecimalFormat("#.####");
-        return "Lon: " + df.format(Float.valueOf(this.getLatitude()));
+        return "Lat: " + df.format(Float.valueOf(this.getLatitude()));
     }
 
     public String getTimestampFormatted() {
