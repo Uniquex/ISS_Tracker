@@ -1,6 +1,8 @@
 package uk.co.uclan.wvitz.iss;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
@@ -10,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -38,6 +41,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -75,6 +79,14 @@ public class Home extends AppCompatActivity
 
     private boolean setFocus = false;
 
+    private final String[] PERMISSIONS = {
+            Manifest.permission.INTERNET,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.CAMERA,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,11 +102,9 @@ public class Home extends AppCompatActivity
             startActivity(myIntent);
         });
 
-        // SUGAR
-//        SugarContext.init(this);
-//        SchemaGenerator schemaGenerator = new SchemaGenerator(this);
-//        schemaGenerator.createDatabase(new SugarDb(this).getDB());
-        // DRAWER
+        ActivityCompat.requestPermissions(this, this.PERMISSIONS, 1);
+
+        // Drawer
         drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -128,6 +138,26 @@ public class Home extends AppCompatActivity
         // Buttons
         this.setOnClickListeners();
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "Permissions granted", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Permissions denied ", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 
     public void setOnClickListeners() {
@@ -244,7 +274,7 @@ public class Home extends AppCompatActivity
         });
     }
 
-    void setTvIssLoc(String lon,String lat) {
+    void setTvIssLoc(String lon, String lat) {
         this.tvLonLat.setText("Lon: " + lon + " " + "Lat: " + lat);
     }
 
@@ -255,9 +285,8 @@ public class Home extends AppCompatActivity
             String lat = ob.get("latitude").toString();
 
             runOnUiThread(() ->
-                this.setTvIssLoc(lon, lat)
+                    this.setTvIssLoc(lon, lat)
             );
-
 
 
             this.setMapViewFocus(lon, lat);
@@ -268,32 +297,31 @@ public class Home extends AppCompatActivity
 
     void getIssLocation() {
         // http://api.open-notify.org/iss-now.json
-            new Timer().scheduleAtFixedRate(new TimerTask() {
+        new Timer().scheduleAtFixedRate(new TimerTask() {
 
-                @Override
-                public void run() {
-                    SyncHttpClient client = new SyncHttpClient();
-                    client.get("http://api.open-notify.org/iss-now.json", null, new JsonHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            setIssLocation(response);
-                        }
-                    });
-                }
-            }, 0, 5000);
+            @Override
+            public void run() {
+                SyncHttpClient client = new SyncHttpClient();
+                client.get("http://api.open-notify.org/iss-now.json", null, new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        setIssLocation(response);
+                    }
+                });
+            }
+        }, 0, 5000);
     }
 
     public Icon convertDrawableToIcon(Drawable drawable, boolean secondary) {
         Bitmap bitmap;
-        if(secondary) {
-             bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth()/2,
-                    drawable.getIntrinsicHeight()/2, Bitmap.Config.ARGB_8888);
+        if (secondary) {
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth() / 2,
+                    drawable.getIntrinsicHeight() / 2, Bitmap.Config.ARGB_8888);
 
         } else {
-            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth()*2,
-                    drawable.getIntrinsicHeight()*2, Bitmap.Config.ARGB_8888);
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth() * 2,
+                    drawable.getIntrinsicHeight() * 2, Bitmap.Config.ARGB_8888);
         }
-
 
 
         Canvas canvas = new Canvas(bitmap);
@@ -307,17 +335,17 @@ public class Home extends AppCompatActivity
     void setMapViewFocus(String lon, String lat) {
         try {
             LatLng latLng = new LatLng(Double.parseDouble(lat), Double.parseDouble(lon));
-            if(!this.pastLocations.contains(latLng)) {
+            if (!this.pastLocations.contains(latLng)) {
                 this.pastLocations.add(latLng);
             }
 
             //Log.i(TAG, latLng.toString() + "  " + pastLocations.size());
 
-            if(!pastLocations.isEmpty()) {
+            if (!pastLocations.isEmpty()) {
                 Icon iconpLoc = convertDrawableToIcon(ContextCompat.getDrawable(this, R.drawable.ic_m_baseline_arrow_drop_down_circle), true);
 
                 this.markers = new ArrayList<>();
-                for (int x = 0; x < pastLocations.size()-1; x++) {
+                for (int x = 0; x < pastLocations.size() - 1; x++) {
                     markers.add(new MarkerOptions()
                             .position(this.pastLocations.get(x))
                             .icon(iconpLoc));
@@ -343,7 +371,7 @@ public class Home extends AppCompatActivity
                     .icon(iconIss)
                     .title(getString(R.string.draw_marker_options_title)));
             mapboxMap.addMarkers(markers);
-            if(!setFocus) {
+            if (!setFocus) {
                 mapboxMap.setCameraPosition(cpos);
                 setFocus = true;
             }

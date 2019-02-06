@@ -8,6 +8,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
     tools:context=".AddObservation">
 
     <com.google.android.material.card.MaterialCardView
@@ -17,12 +21,12 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         app:cardBackgroundColor="@color/colorDarkGrey"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
@@ -32,27 +36,27 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
                 android:backgroundTint="@android:color/white"
                 android:hint="@string/date"
                 android:inputType="date"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/time"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
                 android:backgroundTint="@android:color/white"
                 android:hint="@string/time"
                 android:inputType="time"
-                android:textColor="@android:color/white" />
-        </androidx.appcompat.widget.LinearLayoutCompat>
+                android:textColor="@android:color/white"
+                app:layout_constraintStart_toEndOf="@id/date"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </com.google.android.material.card.MaterialCardView>
@@ -62,10 +66,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         app:cardBackgroundColor="@color/colorDarkGrey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cv_date">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -77,13 +82,11 @@
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:backgroundTint="@android:color/white"
                 android:hint="@string/lat"
                 android:inputType="textPersonName"
                 android:textColor="@android:color/white"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -91,7 +94,6 @@
                 android:id="@+id/lon"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:backgroundTint="@android:color/white"
                 android:hint="@string/lon"
@@ -110,10 +112,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         app:cardBackgroundColor="@color/colorDarkGrey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cv_lonlat">
 
         <androidx.appcompat.widget.AppCompatEditText
@@ -136,11 +139,13 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="8dp"
         android:clickable="true"
         android:focusable="true"
         android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cv_note"
         card_view:cardBackgroundColor="@color/colorAccent">
 
@@ -163,22 +168,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:textSize="18sp"
                 android:text="@string/next_pass_times"
-                android:visibility="invisible"
                 android:textColor="@android:color/white"
-                app:layout_constraintTop_toBottomOf="@id/observationMap"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:textSize="18sp"
+                android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/observationMap" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_passTimesObservation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="invisible"
-                app:layout_constraintStart_toEndOf="@+id/tv_observationPT"
+                app:layout_constraintBottom_toTopOf="@id/inflateMap"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/observationMap"
-                app:layout_constraintBottom_toTopOf="@id/inflateMap" />
+                app:layout_constraintStart_toEndOf="@+id/tv_observationPT"
+                app:layout_constraintTop_toBottomOf="@id/observationMap" />
 
             <ImageView
                 android:id="@+id/inflateMap"
@@ -189,9 +194,9 @@
                 android:onClick="inflateMap"
                 android:src="@drawable/ic_baseline_arrow_down"
                 android:tint="@android:color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -202,7 +207,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="8dp"
         android:maxHeight="100dp"
         app:cardBackgroundColor="@color/colorDarkGrey"
