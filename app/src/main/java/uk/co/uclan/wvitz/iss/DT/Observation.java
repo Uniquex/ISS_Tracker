@@ -124,12 +124,15 @@ public class Observation extends SugarRecord implements Parcelable {
     }
 
     public List<byte[]> getImagesFromContext() {
-        List<Image> images = Select.from(Image.class).where(Condition.prop("observation").eq(this)).list();
         List<byte[]> list = new ArrayList<>();
-        for(int x = 0; x < images.size(); x++) {
-            list.add(images.get(x).getImage());
+        try {
+            List<Image> images = Select.from(Image.class).where(Condition.prop("observation").eq(this)).list();
+            for (int x = 0; x < images.size(); x++) {
+                list.add(images.get(x).getImage());
+            }
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
         }
-
         return list;
     }
 

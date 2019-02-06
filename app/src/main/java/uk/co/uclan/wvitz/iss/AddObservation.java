@@ -519,8 +519,7 @@ public class AddObservation extends AppCompatActivity implements TimePickerDialo
                 }
             }
 
-            Intent myIntent = new Intent(this, Observations.class);
-            startActivity(myIntent);
+            this.finish();
 
         }
 
@@ -544,4 +543,9 @@ public class AddObservation extends AppCompatActivity implements TimePickerDialo
             super.onActivityResult(requestCode, resultCode, data);
         }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        this.mapView.onDestroy();
     }
+}
