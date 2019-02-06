@@ -1,7 +1,6 @@
 package uk.co.uclan.wvitz.iss.adapters;
 
 import android.content.Intent;
-import android.content.res.ObbScanner;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,47 +27,10 @@ public class ObservationAdapter extends RecyclerView.Adapter<ObservationAdapter.
     private MyViewHolder viewHolder;
     private ObservationImageAdapter mAdapter;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView timestamp, lon, lat, note;
-        public RecyclerView observationImages;
-        public RelativeLayout viewBackground, viewForeground;
-        public MaterialCardView observationC;
-        public View view;
-        public Button btnEdit, btnMap;
-
-        public final String TAG = "ObservationAdapter";
-
-        public MyViewHolder(View view) {
-            super(view);
-            timestamp = view.findViewById(R.id.timestamp);
-            lon = view.findViewById(R.id.lon);
-            lat = view.findViewById(R.id.lat);
-            note = view.findViewById(R.id.note);
-            observationImages = view.findViewById(R.id.rv_observationImages);
-            viewBackground = view.findViewById(R.id.view_background);
-            viewForeground = view.findViewById(R.id.view_foreground);
-            btnEdit = view.findViewById(R.id.btn_edit);
-            btnMap = view.findViewById(R.id.btn_map);
-
-            observationC = view.findViewById(R.id.cardObservation);
-            this.view = view;
-        }
-
-        public void onClick(Observation observation) {
-            this.btnEdit.setOnClickListener(v -> {
-                Intent intent = new Intent (this.view.getContext(), AddObservation.class);
-                intent.putExtra("observation", observation);
-                this.view.getContext().startActivity(intent);
-            });
-
-            this.btnMap.setOnClickListener(v -> {
-
-                String uri = String.format(Locale.ENGLISH, "geo:0,0?q=%s,%s", observation.getLatFormatted(), observation.getLonFormatted());
-                Log.i(TAG, uri.toString());
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-                intent.setPackage("com.google.android.apps.maps");
-                this.view.getContext().startActivity(intent);
-            });
+    public void notifyAdapterDataSetChanged() {
+        this.notifyDataSetChanged();
+        if (mAdapter != null) {
+            this.mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -106,10 +68,47 @@ public class ObservationAdapter extends RecyclerView.Adapter<ObservationAdapter.
         return observationList.size();
     }
 
-    public void notifyAdapterDataSetChanged() {
-        super.notifyDataSetChanged();
-        if(mAdapter != null) {
-            this.mAdapter.notifyDataSetChanged();
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        public TextView timestamp, lon, lat, note;
+        public RecyclerView observationImages;
+        public RelativeLayout viewBackground, viewForeground;
+        public MaterialCardView observationC;
+        public View view;
+        public Button btnEdit, btnMap;
+
+        public final String TAG = "ObservationAdapter";
+
+        public MyViewHolder(View view) {
+            super(view);
+            timestamp = view.findViewById(R.id.timestamp);
+            lon = view.findViewById(R.id.lon);
+            lat = view.findViewById(R.id.lat);
+            note = view.findViewById(R.id.note);
+            observationImages = view.findViewById(R.id.rv_observationImages);
+            viewBackground = view.findViewById(R.id.view_background);
+            viewForeground = view.findViewById(R.id.view_foreground);
+            btnEdit = view.findViewById(R.id.btn_edit);
+            btnMap = view.findViewById(R.id.btn_map);
+
+            observationC = view.findViewById(R.id.cardObservation);
+            this.view = view;
+        }
+
+        public void onClick(Observation observation) {
+            this.btnEdit.setOnClickListener(v -> {
+                Intent intent = new Intent (this.view.getContext(), AddObservation.class);
+                intent.putExtra("observation", observation);
+                this.view.getContext().startActivity(intent);
+            });
+
+            this.btnMap.setOnClickListener(v -> {
+
+                String uri = String.format(Locale.ENGLISH, "geo:0,0?q=%s,%s", observation.getLatFormatted(), observation.getLonFormatted());
+                Log.i(TAG, uri);
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                intent.setPackage("com.google.android.apps.maps");
+                this.view.getContext().startActivity(intent);
+            });
         }
     }
 

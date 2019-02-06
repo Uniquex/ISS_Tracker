@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -226,7 +225,7 @@ public class Home extends AppCompatActivity
             TextView astroTitle = findViewById(R.id.astroTitle);
             astroTitle.setText(aList.size() + " " + astroTitle.getText());
 
-            Log.i("Main", aList.toString());
+            //Log.i("Main", aList.toString());
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -312,7 +311,7 @@ public class Home extends AppCompatActivity
                 this.pastLocations.add(latLng);
             }
 
-            Log.i(TAG, latLng.toString() + "  " + pastLocations.size());
+            //Log.i(TAG, latLng.toString() + "  " + pastLocations.size());
 
             if(!pastLocations.isEmpty()) {
                 Icon iconpLoc = convertDrawableToIcon(ContextCompat.getDrawable(this, R.drawable.ic_m_baseline_arrow_drop_down_circle), true);

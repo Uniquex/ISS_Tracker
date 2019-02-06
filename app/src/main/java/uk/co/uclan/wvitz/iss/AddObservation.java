@@ -519,6 +519,9 @@ public class AddObservation extends AppCompatActivity implements TimePickerDialo
                 }
             }
 
+            Intent returnIntent = new Intent();
+            this.setResult(RESULT_OK, returnIntent);
+
             this.finish();
 
         }

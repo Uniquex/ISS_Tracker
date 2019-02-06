@@ -46,7 +46,9 @@
 
         <activity android:name=".Observations" />
         <activity android:name=".PassTimes" />
-        <activity android:name=".AddObservation" />
+        <activity
+            android:name=".AddObservation"
+            android:launchMode="singleTop" />
     </application>
 
 </manifest>

@@ -15,7 +15,6 @@ import com.orm.query.Select;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,6 +35,8 @@ public class Observations extends AppCompatActivity implements RecyclerItemTouch
     private ObservationAdapter mAdapter;
     private FloatingActionButton mFAB;
     private TextView mNoObservations;
+
+    static final int NEW_OBS = 1111;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +74,7 @@ public class Observations extends AppCompatActivity implements RecyclerItemTouch
     public void setOnlickListeners() {
         mFAB.setOnClickListener(v -> {
             Intent myIntent = new Intent(v.getContext(), AddObservation.class);
-            startActivity(myIntent);
+            startActivityForResult(myIntent, NEW_OBS);
         });
     }
 
@@ -88,14 +89,11 @@ public class Observations extends AppCompatActivity implements RecyclerItemTouch
         try {
             List<Observation> observations = Select.from(Observation.class).orderBy("timestamp").list();
 
-            Collections.sort(observations, new Comparator<Observation>() {
-
-                public int compare(Observation o1, Observation o2) {
-                    long a = o1.getTimestamp(), b = o2.getTimestamp();
-                    return a > b ? -1
-                            : a < b ? 1
-                            : 0;
-                }
+            Collections.sort(observations, (o1, o2) -> {
+                long a = o1.getTimestamp(), b = o2.getTimestamp();
+                return a > b ? -1
+                        : a < b ? 1
+                        : 0;
             });
 
             if (observations.size() == 0) {
@@ -105,9 +103,9 @@ public class Observations extends AppCompatActivity implements RecyclerItemTouch
                 mRecyclerView.setVisibility(View.VISIBLE);
                 mNoObservations.setVisibility(View.GONE);
             }
-
+            mList.clear();
             mList.addAll(observations);
-            mAdapter.notifyDataSetChanged();
+            mAdapter.notifyAdapterDataSetChanged();
 
             Log.d(TAG, "Observations: " + String.valueOf(observations.size()));
         } catch (IllegalStateException e) {
@@ -171,9 +169,29 @@ public class Observations extends AppCompatActivity implements RecyclerItemTouch
     public void onResume() {
         super.onResume();
         if(mAdapter != null) {
-            mAdapter.notifyAdapterDataSetChanged();
+            this.readDBEntry();
         }
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if (mAdapter != null) {
+            this.readDBEntry();
+        }
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.out.println("Observations onActivityResult  " + requestCode + " " + resultCode);
+        if (requestCode == NEW_OBS) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                if (mAdapter != null) {
+                    System.out.println("----------------------------Intent received");
+                    this.readDBEntry();
+                }
+            }
+        }
+    }
 }
