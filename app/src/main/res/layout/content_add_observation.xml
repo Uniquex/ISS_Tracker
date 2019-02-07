@@ -35,14 +35,11 @@
                 android:id="@+id/date"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
                 android:backgroundTint="@android:color/white"
                 android:hint="@string/date"
                 android:inputType="date"
                 android:textColor="@android:color/white"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                tools:layout_editor_absoluteX="8dp" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/time"
@@ -79,20 +76,19 @@
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/lat"
-                android:layout_width="170dp"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
                 android:backgroundTint="@android:color/white"
                 android:hint="@string/lat"
                 android:inputType="textPersonName"
                 android:textColor="@android:color/white"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView2"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/lon"
-                android:layout_width="170dp"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:backgroundTint="@android:color/white"
@@ -102,6 +98,30 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintLeft_toRightOf="@+id/lat"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/lat"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/ef_font_medium"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/lon"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/ef_font_medium"
+                app:layout_constraintEnd_toStartOf="@+id/lon"
+                mapbox:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -242,6 +262,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="add Image"
+                android:textSize="@dimen/buttonFontSize"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -257,8 +278,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginRight="10dp"
         android:text="@string/save"
         android:textColor="@android:color/white"
+        android:textSize="@dimen/buttonFontSize"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cv_recycler" />
 

@@ -14,7 +14,6 @@ import com.orm.SugarContext;
 import com.orm.query.Select;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -88,13 +87,8 @@ public class Observations extends AppCompatActivity implements RecyclerItemTouch
 
         try {
             List<Observation> observations = Select.from(Observation.class).orderBy("timestamp").list();
-
-            Collections.sort(observations, (o1, o2) -> {
-                long a = o1.getTimestamp(), b = o2.getTimestamp();
-                return a > b ? -1
-                        : a < b ? 1
-                        : 0;
-            });
+            List<Observation> observations2 = new ArrayList<>();
+            observations2.addAll(observations);
 
             if (observations.size() == 0) {
                 mRecyclerView.setVisibility(View.GONE);
@@ -105,6 +99,7 @@ public class Observations extends AppCompatActivity implements RecyclerItemTouch
             }
             mList.clear();
             mList.addAll(observations);
+
             mAdapter.notifyAdapterDataSetChanged();
 
             Log.d(TAG, "Observations: " + String.valueOf(observations.size()));

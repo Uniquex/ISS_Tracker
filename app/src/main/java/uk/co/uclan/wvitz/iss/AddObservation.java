@@ -164,6 +164,7 @@ public class AddObservation extends AppCompatActivity implements TimePickerDialo
                 Observation obs = data.getParcelable("observation");
                 setFields(obs);
                 deactivateFields();
+                setTitle("Edit Observation");
                 this.edit = true;
             } catch (NullPointerException e) {
                 e.printStackTrace();

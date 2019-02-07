@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.google.android.material.card.MaterialCardView;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -28,6 +29,14 @@ public class ObservationAdapter extends RecyclerView.Adapter<ObservationAdapter.
     private ObservationImageAdapter mAdapter;
 
     public void notifyAdapterDataSetChanged() {
+
+        Collections.sort(this.observationList, (o1, o2) -> {
+            long a = o1.getTimestamp(), b = o2.getTimestamp();
+            return a > b ? -1
+                    : a < b ? 1
+                    : 0;
+        });
+
         this.notifyDataSetChanged();
         if (mAdapter != null) {
             this.mAdapter.notifyDataSetChanged();
